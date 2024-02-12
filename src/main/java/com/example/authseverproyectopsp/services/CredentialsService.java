@@ -23,20 +23,20 @@ public class CredentialsService {
         this.co = co;
         this.tokensGenerator = tokensGenerator;
     }
-
     public Either<Errors, Integer> register(String name, String passw) {
         String str = co.createPasswordEncoder().encode(passw);
         dao.save(new Credentials(name, str));
         return Either.right(0);
     }
 
+
     public Either<Errors,List<String>>login(String name, String passw){
         Credentials credentials = dao.findByUserName(name).orElseThrow();
         List<String> tokens=new ArrayList<>();
         if (co.createPasswordEncoder().matches(passw, credentials.getPassword())) {
 
-            tokens.add(tokensGenerator.generateAccessToken(new Credentials(name,credentials.getPassword())).get());
-            tokens.add(tokensGenerator.generateRefreshToken(new Credentials(name,credentials.getPassword())).get());
+            tokens.add(tokensGenerator.generateAccessToken(credentials).get());
+            tokens.add(tokensGenerator.generateRefreshToken(credentials).get());
         }
 
         return Either.right(tokens);

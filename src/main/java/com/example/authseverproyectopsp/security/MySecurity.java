@@ -45,7 +45,8 @@ public class MySecurity {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/login").permitAll()
-                                //.requestMatchers("/verify").hasRole("ROLE_ADMIN")
+                                .requestMatchers("/register").permitAll()
+                                .requestMatchers("/getAccessToken").permitAll()
                                 .anyRequest().authenticated()
 
 

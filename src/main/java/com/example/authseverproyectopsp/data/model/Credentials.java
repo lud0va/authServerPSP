@@ -28,5 +28,6 @@ public class Credentials {
     public Credentials(String userName, String password) {
         this.userName = userName;
         this.password = password;
+        this.rol="user";
     }
 }

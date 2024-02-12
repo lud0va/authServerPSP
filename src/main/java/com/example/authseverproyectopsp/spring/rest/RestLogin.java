@@ -23,6 +23,16 @@ public class RestLogin {
         return  serv.login(username,password).get();
 
     }
+
+    @GetMapping("/register")
+    public Boolean register(@RequestParam(name = "username")String username,@RequestParam(name = "password")String password){
+        Either<Errors,Integer>  result =serv.register(username,password);
+        if (result.isRight()){
+            return true;
+        }else {
+            return false;
+        }
+    }
     @GetMapping("/getAccessToken")
     public String getAccessToken(@RequestParam(name="refreshtoken")String refresh){
         Either<Errors,String>  result =serv.getAccessToken(refresh);

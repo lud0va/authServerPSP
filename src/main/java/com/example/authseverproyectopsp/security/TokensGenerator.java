@@ -68,7 +68,6 @@ public class TokensGenerator {
             KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(co.getServerName(), keyPassword);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
-            // Construir el token JWT
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(privateKey)
                     .build()
