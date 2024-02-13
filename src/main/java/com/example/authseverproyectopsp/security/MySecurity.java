@@ -47,7 +47,11 @@ public class MySecurity {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/getAccessToken").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/swagger-ui/index.html").permitAll()
+                                .requestMatchers("/swagger-ui-custom.html").permitAll()
+
+
+                                .anyRequest().permitAll()
 
 
                 ).build();
