@@ -1,6 +1,7 @@
 package com.example.authseverproyectopsp.services;
 
 import com.example.authseverproyectopsp.common.Configuration;
+import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.data.model.Credentials;
 import com.example.authseverproyectopsp.data.model.Errors;
@@ -47,7 +48,7 @@ public class CredentialsService {
             return Either.right(tokens);
 
         }else {
-            return Either.left(new Errors("Usuario invalido"));
+            return Either.left(new Errors(Constantes.USUARIO_INVALIDO));
         }
 
 

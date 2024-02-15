@@ -1,5 +1,6 @@
 package com.example.authseverproyectopsp.data.model;
 
+import com.example.authseverproyectopsp.common.Constantes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,17 +13,18 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "credentials")
+@Table(name = Constantes.CREDENTIALS)
 public class Credentials {
+    public static final String USERNAME = "user_name";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "_id", nullable = false)
+    @Column(name = Constantes.ID, nullable = false)
     private int id;
-    @Column(name = "user_name")
+    @Column(name = USERNAME)
     private String userName;
-    @Column(name = "password")
+    @Column(name = Constantes.PASSWORD)
     private String password;
-    @Column(name = "rol")
+    @Column(name = Constantes.ROL)
     private String rol;
 
     public Credentials(String userName, String password) {

@@ -1,14 +1,12 @@
 package com.example.authseverproyectopsp.security;
 
 
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+
 
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.security.Key;
 
 @Configuration
 @EnableWebSecurity
@@ -24,16 +21,17 @@ import java.security.Key;
 @EnableMethodSecurity(securedEnabled = true,prePostEnabled = false,jsr250Enabled = true)
 public class MySecurity {
 
+    private static final String[] AUTH_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/v2/api-docs/**",
+            "/swagger-resources/**"
+    };
 
 
 
 
 
-    @Bean("JWT")
-    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public Key key() {
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    }
 
 
 
@@ -48,7 +46,7 @@ public class MySecurity {
                                 .requestMatchers("/register").permitAll()
                                 .requestMatchers("/getAccessToken").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
-
+                                .requestMatchers(AUTH_WHITE_LIST).permitAll()
                                 .anyRequest().authenticated()
 
 

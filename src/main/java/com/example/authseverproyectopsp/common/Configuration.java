@@ -4,6 +4,7 @@ import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.security.CustomUserDetailsService;
 import lombok.Getter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,12 +14,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
+
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Properties;
 
 @org.springframework.context.annotation.Configuration
 @Getter
 public class Configuration {
+
     private String clave;
     private String nombreKeystore;
     private String serverName;
@@ -28,13 +32,16 @@ public class Configuration {
         try {
             Properties p = new Properties();
             p.loadFromXML(Configuration.class.getClassLoader().getResourceAsStream("config/claveKeystore.xml"));
-            this.clave = p.getProperty("clave");
-            this.nombreKeystore=p.getProperty("keystoreName");
-            this.serverName=p.getProperty("serverName");
+            this.clave = p.getProperty(Constantes.CLAVESERV);
+            this.nombreKeystore=p.getProperty(Constantes.KEYSTORENAME);
+            this.serverName=p.getProperty(Constantes.SERVERNAME);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
+
+
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
