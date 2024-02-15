@@ -15,12 +15,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = Constantes.CREDENTIALS)
 public class Credentials {
-    public static final String USERNAME = "user_name";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = Constantes.ID, nullable = false)
     private int id;
-    @Column(name = USERNAME)
+    @Column(name = Constantes.USERNAME)
     private String userName;
     @Column(name = Constantes.PASSWORD)
     private String password;
@@ -30,6 +30,6 @@ public class Credentials {
     public Credentials(String userName, String password) {
         this.userName = userName;
         this.password = password;
-        this.rol="user";
+        this.rol = Constantes.USER;
     }
 }

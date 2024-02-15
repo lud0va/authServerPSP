@@ -18,6 +18,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 @Component
 public class TokensGenerator {
 
@@ -28,7 +29,7 @@ public class TokensGenerator {
     }
 
 
-    public Either<Errors,String> generateAccessToken(Credentials credentials){
+    public Either<Errors, String> generateAccessToken(Credentials credentials) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -48,17 +49,19 @@ public class TokensGenerator {
                     .setExpiration(Date
                             .from(LocalDateTime.now().plusSeconds(180)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
-                    .signWith( privateKey)
+                    .signWith(privateKey)
 
                     .compact();
             return Either.right(accesToken);
-        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException | UnrecoverableEntryException  e) {
+        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
+                 UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
             return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
 
         }
     }
-    public Either<Errors,String> getNewAccesTokenFromRefreshToken(String header){
+
+    public Either<Errors, String> getNewAccesTokenFromRefreshToken(String header) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -80,11 +83,12 @@ public class TokensGenerator {
                     .setExpiration(Date
                             .from(LocalDateTime.now().plusSeconds(180)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
-                    .signWith( privateKey)
+                    .signWith(privateKey)
 
                     .compact();
             return Either.right(accesToken);
-        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException | UnrecoverableEntryException  e) {
+        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
+                 UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
             return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
 
@@ -92,7 +96,7 @@ public class TokensGenerator {
     }
 
 
-    public Either<Errors,String> generateRefreshToken(Credentials credentials){
+    public Either<Errors, String> generateRefreshToken(Credentials credentials) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -116,7 +120,8 @@ public class TokensGenerator {
 
                     .compact();
             return Either.right(accesToken);
-        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException | UnrecoverableEntryException  e) {
+        } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
+                 UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
             return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
 

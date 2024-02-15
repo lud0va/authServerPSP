@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CredentialsDao extends ListCrudRepository<Credentials,Long> {
+public interface CredentialsDao extends ListCrudRepository<Credentials, Long> {
 
     Optional<Credentials> findByUserName(String userName);
 

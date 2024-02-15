@@ -10,7 +10,6 @@ import io.vavr.control.Either;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,34 +28,33 @@ public class CredentialsService {
         this.tokensGenerator = tokensGenerator;
         this.authenticationManager = authenticationManager;
     }
-    public Either<Errors, Integer> register(String name, String passw) {
+
+    public boolean register(String name, String passw) {
         String str = co.createPasswordEncoder().encode(passw);
         dao.save(new Credentials(name, str));
-        return Either.right(0);
+        return true;
     }
 
 
-    public Either<Errors,List<String>>login(String name, String passw) {
+    public Either<Errors, List<String>> login(String name, String passw) {
         Authentication auth =
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(name, passw));
         List<String> tokens = new ArrayList<>();
-        if (auth.isAuthenticated()){
-            Credentials credentials=new Credentials(name,passw);
+        if (auth.isAuthenticated()) {
+            Credentials credentials = new Credentials(name, passw);
             tokens.add(tokensGenerator.generateAccessToken(credentials).get());
             tokens.add(tokensGenerator.generateRefreshToken(credentials).get());
             return Either.right(tokens);
 
-        }else {
+        } else {
             return Either.left(new Errors(Constantes.USUARIO_INVALIDO));
         }
 
 
-
-
-
     }
-    public Either<Errors,String> getAccessToken(String header){
+
+    public Either<Errors, String> getAccessToken(String header) {
         return tokensGenerator.getNewAccesTokenFromRefreshToken(header);
 
     }

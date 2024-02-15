@@ -4,7 +4,6 @@ import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.security.CustomUserDetailsService;
 import lombok.Getter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,10 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
-
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Properties;
 
 @org.springframework.context.annotation.Configuration
@@ -33,13 +29,12 @@ public class Configuration {
             Properties p = new Properties();
             p.loadFromXML(Configuration.class.getClassLoader().getResourceAsStream("config/claveKeystore.xml"));
             this.clave = p.getProperty(Constantes.CLAVESERV);
-            this.nombreKeystore=p.getProperty(Constantes.KEYSTORENAME);
-            this.serverName=p.getProperty(Constantes.SERVERNAME);
+            this.nombreKeystore = p.getProperty(Constantes.KEYSTORENAME);
+            this.serverName = p.getProperty(Constantes.SERVERNAME);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
     }
-
 
 
     @Bean
@@ -51,6 +46,7 @@ public class Configuration {
     public UserDetailsService userDetailsService(CredentialsDao userRepository) {
         return new CustomUserDetailsService(userRepository);
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
                                                          CredentialsDao userRepository,
