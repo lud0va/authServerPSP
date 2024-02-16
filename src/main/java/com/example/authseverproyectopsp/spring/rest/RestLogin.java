@@ -2,8 +2,8 @@ package com.example.authseverproyectopsp.spring.rest;
 
 
 import com.example.authseverproyectopsp.common.Constantes;
-import com.example.authseverproyectopsp.data.model.Errors;
-import com.example.authseverproyectopsp.services.CredentialsService;
+import com.example.authseverproyectopsp.domain.model.Errors;
+import com.example.authseverproyectopsp.domain.services.CredentialsService;
 import io.vavr.control.Either;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

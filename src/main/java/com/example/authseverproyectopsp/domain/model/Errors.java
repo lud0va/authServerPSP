@@ -1,4 +1,4 @@
-package com.example.authseverproyectopsp.data.model;
+package com.example.authseverproyectopsp.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

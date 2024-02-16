@@ -1,8 +1,8 @@
-package com.example.authseverproyectopsp.security;
+package com.example.authseverproyectopsp.spring.rest.security;
 
 
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
-import com.example.authseverproyectopsp.data.model.Credentials;
+import com.example.authseverproyectopsp.domain.model.Credentials;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

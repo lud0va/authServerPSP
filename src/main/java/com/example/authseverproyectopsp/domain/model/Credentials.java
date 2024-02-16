@@ -1,4 +1,4 @@
-package com.example.authseverproyectopsp.data.model;
+package com.example.authseverproyectopsp.domain.model;
 
 import com.example.authseverproyectopsp.common.Constantes;
 import jakarta.persistence.*;

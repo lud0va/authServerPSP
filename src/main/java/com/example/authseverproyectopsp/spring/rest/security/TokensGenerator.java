@@ -1,9 +1,9 @@
-package com.example.authseverproyectopsp.security;
+package com.example.authseverproyectopsp.spring.rest.security;
 
 import com.example.authseverproyectopsp.common.Configuration;
 import com.example.authseverproyectopsp.common.Constantes;
-import com.example.authseverproyectopsp.data.model.Credentials;
-import com.example.authseverproyectopsp.data.model.Errors;
+import com.example.authseverproyectopsp.domain.model.Credentials;
+import com.example.authseverproyectopsp.domain.model.Errors;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.vavr.control.Either;

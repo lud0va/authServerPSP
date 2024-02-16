@@ -1,17 +1,20 @@
-package com.example.authseverproyectopsp.services;
+package com.example.authseverproyectopsp.domain.services;
 
 import com.example.authseverproyectopsp.common.Configuration;
 import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
-import com.example.authseverproyectopsp.data.model.Credentials;
-import com.example.authseverproyectopsp.data.model.Errors;
-import com.example.authseverproyectopsp.security.TokensGenerator;
+import com.example.authseverproyectopsp.domain.model.Credentials;
+import com.example.authseverproyectopsp.domain.model.Errors;
+import com.example.authseverproyectopsp.spring.rest.errors.CredentialInvalid;
+import com.example.authseverproyectopsp.spring.rest.security.TokensGenerator;
 import io.vavr.control.Either;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,19 +40,24 @@ public class CredentialsService {
 
 
     public Either<Errors, List<String>> login(String name, String passw) {
-        Authentication auth =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(name, passw));
-        List<String> tokens = new ArrayList<>();
-        if (auth.isAuthenticated()) {
-            Credentials credentials = new Credentials(name, passw);
-            tokens.add(tokensGenerator.generateAccessToken(credentials).get());
-            tokens.add(tokensGenerator.generateRefreshToken(credentials).get());
-            return Either.right(tokens);
+        try {
+            Authentication auth =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(name, passw));
+            List<String> tokens = new ArrayList<>();
+            if (auth.isAuthenticated()) {
+                Credentials credentials = new Credentials(name, passw);
+                tokens.add(tokensGenerator.generateAccessToken(credentials).get());
+                tokens.add(tokensGenerator.generateRefreshToken(credentials).get());
+                return Either.right(tokens);
 
-        } else {
-            return Either.left(new Errors(Constantes.USUARIO_INVALIDO));
+            } else {
+                throw new CredentialInvalid("");
+            }
+        }catch (BadCredentialsException e){
+            throw new CredentialInvalid(e.getMessage());
         }
+
 
 
     }

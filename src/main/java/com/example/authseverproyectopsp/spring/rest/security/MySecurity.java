@@ -1,4 +1,4 @@
-package com.example.authseverproyectopsp.security;
+package com.example.authseverproyectopsp.spring.rest.security;
 
 
 import com.example.authseverproyectopsp.common.Constantes;

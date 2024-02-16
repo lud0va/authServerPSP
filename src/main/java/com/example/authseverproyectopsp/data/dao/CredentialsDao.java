@@ -1,6 +1,6 @@
 package com.example.authseverproyectopsp.data.dao;
 
-import com.example.authseverproyectopsp.data.model.Credentials;
+import com.example.authseverproyectopsp.domain.model.Credentials;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 

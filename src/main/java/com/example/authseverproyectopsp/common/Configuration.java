@@ -1,7 +1,7 @@
 package com.example.authseverproyectopsp.common;
 
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
-import com.example.authseverproyectopsp.security.CustomUserDetailsService;
+import com.example.authseverproyectopsp.spring.rest.security.CustomUserDetailsService;
 import lombok.Getter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
