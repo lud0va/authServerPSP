@@ -4,6 +4,7 @@ package com.example.authseverproyectopsp.spring.rest;
 import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.domain.model.Errors;
 import com.example.authseverproyectopsp.domain.services.CredentialsService;
+import com.example.authseverproyectopsp.spring.auth.AuthenticationResponse;
 import io.vavr.control.Either;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,16 +26,11 @@ public class RestLogin {
     }
 
     @GetMapping(Constantes.LOGIN)
+    public AuthenticationResponse login(@RequestParam(name =  Constantes.USERNAMEP, required = true) String username, @RequestParam(name = Constantes.PASSWORD, required = false) String password) {
 
-    public List<String> login(@RequestParam(name =  Constantes.USERNAMEP, required = true) String username, @RequestParam(name = Constantes.PASSWORD, required = false) String password) {
-        List<String> r = serv.login(username, password).get();
-        List<String> x = new ArrayList<>();
-        x.add(Constantes.ACCESS);
-        x.add(r.get(0));
-        x.add(Constantes.REFRESH);
-        x.add(r.get(1));
 
-        return x;
+
+        return serv.login(username, password);
 
     }
 
