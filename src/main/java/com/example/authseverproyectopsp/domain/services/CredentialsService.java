@@ -47,7 +47,7 @@ public class CredentialsService {
                             new UsernamePasswordAuthenticationToken(name, passw));
             List<String> tokens = new ArrayList<>();
             if (auth.isAuthenticated()) {
-                Credentials credentials = new Credentials(name, passw);
+                Credentials credentials = dao.findByUserName(name).get();
                 tokens.add(tokensGenerator.generateAccessToken(credentials).get());
                 tokens.add(tokensGenerator.generateRefreshToken(credentials).get());
                 return AuthenticationResponse.builder()
