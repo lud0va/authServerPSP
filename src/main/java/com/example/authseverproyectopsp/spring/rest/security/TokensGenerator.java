@@ -81,7 +81,7 @@ public class TokensGenerator {
                     .setSubject(claims.get(Constantes.USERNAME).toString())
                     .claim(Constantes.ROLE, claims.get(Constantes.ROLE))
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(180)
+                            .from(LocalDateTime.now().plusSeconds(60)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
 
@@ -113,7 +113,7 @@ public class TokensGenerator {
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.ROLE, credentials.getRol())
                     .claim(Constantes.USERNAME, credentials.getUserName())
-                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(10)
+                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(60)
                             .atZone(ZoneId.systemDefault()).toInstant()))
 
                     .signWith(privateKey)
