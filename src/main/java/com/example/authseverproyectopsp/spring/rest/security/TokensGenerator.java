@@ -2,8 +2,10 @@ package com.example.authseverproyectopsp.spring.rest.security;
 
 import com.example.authseverproyectopsp.common.Configuration;
 import com.example.authseverproyectopsp.common.Constantes;
+import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.domain.model.Credentials;
 import com.example.authseverproyectopsp.domain.model.Errors;
+import com.example.authseverproyectopsp.spring.rest.errors.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.vavr.control.Either;
@@ -23,13 +25,15 @@ import java.util.logging.Logger;
 public class TokensGenerator {
 
     private final Configuration co;
+    private final CredentialsDao dao;
 
-    public TokensGenerator(Configuration co) {
+    public TokensGenerator(Configuration co, CredentialsDao dao) {
         this.co = co;
+        this.dao = dao;
     }
 
 
-    public Either<Errors, String> generateAccessToken(Credentials credentials) {
+    public String generateAccessToken(Credentials credentials) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -47,21 +51,21 @@ public class TokensGenerator {
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.ROLE, credentials.getRol())
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(10)
+                            .from(LocalDateTime.now().plusSeconds(180)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
 
                     .compact();
-            return Either.right(accesToken);
+            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
-            return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
+            throw new TokenInvalidoException(e.getMessage());
 
         }
     }
 
-    public Either<Errors, String> getNewAccesTokenFromRefreshToken(String header) {
+    public String getNewAccesTokenFromRefreshToken(String header) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -77,26 +81,26 @@ public class TokensGenerator {
                     .build()
                     .parseClaimsJws(header)
                     .getBody();
+            String role = dao.findByUserName(claims.get(Constantes.USERNAME).toString()).orElseThrow().getRol();
             String accesToken = Jwts.builder()
                     .setSubject(claims.get(Constantes.USERNAME).toString())
-                    .claim(Constantes.ROLE, claims.get(Constantes.ROLE))
+                    .claim(Constantes.ROLE, role)
                     .setExpiration(Date
                             .from(LocalDateTime.now().plusSeconds(60)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
 
                     .compact();
-            return Either.right(accesToken);
+            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
-            Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
-            return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
+            throw new TokenInvalidoException(e.getMessage());
 
         }
     }
 
 
-    public Either<Errors, String> generateRefreshToken(Credentials credentials) {
+    public String generateRefreshToken(Credentials credentials) {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
@@ -111,19 +115,18 @@ public class TokensGenerator {
             // Construir el token JWT
             String accesToken = Jwts.builder()
                     .setSubject(credentials.getUserName())
-                    .claim(Constantes.ROLE, credentials.getRol())
                     .claim(Constantes.USERNAME, credentials.getUserName())
-                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(60)
+                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(10)
                             .atZone(ZoneId.systemDefault()).toInstant()))
 
                     .signWith(privateKey)
 
                     .compact();
-            return Either.right(accesToken);
+            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
-            return Either.left(new Errors(Constantes.ERROR_FIRMANDO_EL_ACCESS_TOKEN));
+            throw new TokenInvalidoException(e.getMessage());
 
         }
     }

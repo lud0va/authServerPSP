@@ -26,8 +26,7 @@ public class RestLogin {
     }
 
     @GetMapping(Constantes.LOGIN)
-    public AuthenticationResponse login(@RequestParam(name =  Constantes.USERNAMEP, required = true) String username, @RequestParam(name = Constantes.PASSWORD, required = false) String password) {
-
+    public AuthenticationResponse login(@RequestParam(name = Constantes.USERNAMEP, required = true) String username, @RequestParam(name = Constantes.PASSWORD, required = false) String password) {
 
 
         return serv.login(username, password);
@@ -42,12 +41,10 @@ public class RestLogin {
 
     @GetMapping(Constantes.GETACCESSTOKEN)
     public String getAccessToken(@RequestParam(name = Constantes.REFRESHTOKEN) String refresh) {
-        Either<Errors, String> result = serv.getAccessToken(refresh);
-        if (result.isRight()) {
-            return result.get();
-        } else {
-            return result.getLeft().getMsg();
-        }
+        String result = serv.getAccessToken(refresh);
+
+        return result;
+
 
     }
 
