@@ -47,7 +47,7 @@ public class TokensGenerator {
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.ROLE, credentials.getRol())
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(180)
+                            .from(LocalDateTime.now().plusSeconds(10)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
 
