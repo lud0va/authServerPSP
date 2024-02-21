@@ -1,14 +1,13 @@
 package com.example.authseverproyectopsp.domain.services;
 
 import com.example.authseverproyectopsp.common.Configuration;
+import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.domain.model.Credentials;
-import com.example.authseverproyectopsp.domain.model.Errors;
 import com.example.authseverproyectopsp.spring.auth.AuthenticationResponse;
 import com.example.authseverproyectopsp.spring.rest.errors.exceptions.CredentialInvalid;
 import com.example.authseverproyectopsp.spring.rest.errors.exceptions.UserExistException;
 import com.example.authseverproyectopsp.spring.rest.security.TokensGenerator;
-import io.vavr.control.Either;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +49,7 @@ public class CredentialsService {
                             new UsernamePasswordAuthenticationToken(name, passw));
             List<String> tokens = new ArrayList<>();
             if (auth.isAuthenticated()) {
-                Credentials credentials = dao.findByUserName(name).get();
+                Credentials credentials = dao.findByUserName(name).orElseThrow(() -> new CredentialInvalid(Constantes.CREDENTIAL_INVALIDA));
                 tokens.add(tokensGenerator.generateAccessToken(credentials));
                 tokens.add(tokensGenerator.generateRefreshToken(credentials));
                 return AuthenticationResponse.builder()
@@ -59,10 +58,10 @@ public class CredentialsService {
                         .build();
 
             } else {
-                throw new CredentialInvalid("Credential invalida");
+                throw new CredentialInvalid(Constantes.CREDENTIAL_INVALIDA);
             }
         } catch (BadCredentialsException e) {
-            throw new CredentialInvalid("Usuario no encontrado ");
+            throw new CredentialInvalid(Constantes.USUARIO_NO_ENCONTRADO);
         }
 
     }

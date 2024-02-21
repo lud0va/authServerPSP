@@ -4,11 +4,9 @@ import com.example.authseverproyectopsp.common.Configuration;
 import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.domain.model.Credentials;
-import com.example.authseverproyectopsp.domain.model.Errors;
 import com.example.authseverproyectopsp.spring.rest.errors.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.vavr.control.Either;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -123,9 +121,8 @@ public class TokensGenerator {
                     .compact();
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
-            Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
-            throw new TokenInvalidoException(e.getMessage());
-
+            Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, "Error while processing tokens", e);
+            throw new TokenInvalidoException("Error while processing tokens"+e.getMessage());
         }
     }
 }

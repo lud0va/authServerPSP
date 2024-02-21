@@ -3,6 +3,12 @@ package com.example.authseverproyectopsp.common;
 public class Constantes {
     public static final String USER = "user";
     public static final String USERNAMEP = "username";
+    public static final String CREDENTIAL_INVALIDA = "Credential invalida";
+    public static final String USUARIO_NO_ENCONTRADO = "Usuario no encontrado ";
+    public static final String ACCESS_TOKEN = "access_token";
+    public static final String REFRESH_TOKEN = "refresh_token";
+    public static final String TOKEN_INVALIDO = "Token invalido  ";
+    public static final String ESE_USER_YA_EXISTE = "Ese user ya existe";
 
     private Constantes() {
     }
