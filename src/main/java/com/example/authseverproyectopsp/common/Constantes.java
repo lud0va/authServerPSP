@@ -9,6 +9,8 @@ public class Constantes {
     public static final String REFRESH_TOKEN = "refresh_token";
     public static final String TOKEN_INVALIDO = "Token invalido  ";
     public static final String ESE_USER_YA_EXISTE = "Ese user ya existe";
+    public static final String USER_NOT_FOUND = "User not found";
+    public static final String ERROR_WHILE_PROCESSING_TOKENS = "Error while processing tokens";
 
     private Constantes() {
     }

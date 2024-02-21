@@ -1,12 +1,12 @@
 package com.example.authseverproyectopsp.spring.rest.security;
 
-import com.example.authseverproyectopsp.common.Configuration;
 import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.domain.model.Credentials;
 import com.example.authseverproyectopsp.spring.rest.errors.exceptions.TokenInvalidoException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -21,12 +21,22 @@ import java.util.logging.Logger;
 
 @Component
 public class TokensGenerator {
+    @Value("${application.security.jwt.keystoreName}")
+    private String keystorename;
+    @Value("${application.security.jwt.clave}")
+    private String claveKeystore;
+    @Value("${application.security.jwt.serverName}")
+    private String serverName;
+    @Value("${application.security.jwt.access-expiration}")
+    private long refreshExpiration;
+    @Value("${application.security.jwt.refresh-token.expiration}")
+    private  long access;
 
-    private final Configuration co;
+
     private final CredentialsDao dao;
 
-    public TokensGenerator(Configuration co, CredentialsDao dao) {
-        this.co = co;
+    public TokensGenerator( CredentialsDao dao) {
+
         this.dao = dao;
     }
 
@@ -35,11 +45,11 @@ public class TokensGenerator {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
-            keyStore.load(new FileInputStream(co.getNombreKeystore()), co.getClave().toCharArray());
+            keyStore.load(new FileInputStream(keystorename), claveKeystore.toCharArray());
 
             // Obtener la clave privada del servidor
-            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(co.getClave().toCharArray());
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(co.getServerName(), keyPassword);
+            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(claveKeystore.toCharArray());
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(serverName, keyPassword);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
 
@@ -49,7 +59,7 @@ public class TokensGenerator {
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.ROLE, credentials.getRol())
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(10)
+                            .from(LocalDateTime.now().plusSeconds(access)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
                     .compact();
@@ -65,11 +75,11 @@ public class TokensGenerator {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
-            keyStore.load(new FileInputStream(co.getNombreKeystore()), co.getClave().toCharArray());
+            keyStore.load(new FileInputStream(keystorename), claveKeystore.toCharArray());
 
             // Obtener la clave privada del servidor
-            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(co.getClave().toCharArray());
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(co.getServerName(), keyPassword);
+            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(claveKeystore.toCharArray());
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(serverName, keyPassword);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
             Claims claims = Jwts.parserBuilder()
@@ -83,7 +93,7 @@ public class TokensGenerator {
                     .setSubject(claims.get(Constantes.USERNAME).toString())
                     .claim(Constantes.ROLE, role)
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(60)
+                            .from(LocalDateTime.now().plusSeconds(access)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
 
@@ -100,11 +110,11 @@ public class TokensGenerator {
         try {
             // Cargar el keystore
             KeyStore keyStore = KeyStore.getInstance(Constantes.PKCS_12);
-            keyStore.load(new FileInputStream(co.getNombreKeystore()), co.getClave().toCharArray());
+            keyStore.load(new FileInputStream(keystorename), claveKeystore.toCharArray());
 
             // Obtener la clave privada del servidor
-            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(co.getClave().toCharArray());
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(co.getServerName(), keyPassword);
+            KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(claveKeystore.toCharArray());
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(serverName, keyPassword);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
 
@@ -113,7 +123,7 @@ public class TokensGenerator {
             return Jwts.builder()
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.USERNAME, credentials.getUserName())
-                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(10)
+                    .setExpiration(Date.from(LocalDateTime.now().plusMinutes(refreshExpiration)
                             .atZone(ZoneId.systemDefault()).toInstant()))
                     .claim(Constantes.ROLE, credentials.getRol())
                     .signWith(privateKey)
@@ -121,8 +131,8 @@ public class TokensGenerator {
                     .compact();
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
-            Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, "Error while processing tokens", e);
-            throw new TokenInvalidoException("Error while processing tokens"+e.getMessage());
+            Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, Constantes.ERROR_WHILE_PROCESSING_TOKENS, e);
+            throw new TokenInvalidoException(Constantes.ERROR_WHILE_PROCESSING_TOKENS +e.getMessage());
         }
     }
 }

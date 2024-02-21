@@ -12,29 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.IOException;
-import java.util.Properties;
+
 
 @org.springframework.context.annotation.Configuration
 @Getter
 public class Configuration {
 
-    private String clave;
-    private String nombreKeystore;
-    private String serverName;
 
-
-    public Configuration() {
-        try {
-            Properties p = new Properties();
-            p.loadFromXML(Configuration.class.getClassLoader().getResourceAsStream("config/claveKeystore.xml"));
-            this.clave = p.getProperty(Constantes.CLAVESERV);
-            this.nombreKeystore = p.getProperty(Constantes.KEYSTORENAME);
-            this.serverName = p.getProperty(Constantes.SERVERNAME);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
 
 
     @Bean

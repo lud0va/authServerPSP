@@ -1,6 +1,7 @@
 package com.example.authseverproyectopsp.spring.rest.security;
 
 
+import com.example.authseverproyectopsp.common.Constantes;
 import com.example.authseverproyectopsp.data.dao.CredentialsDao;
 import com.example.authseverproyectopsp.domain.model.Credentials;
 import org.springframework.security.core.userdetails.User;
@@ -22,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Credentials user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Credentials user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException(Constantes.USER_NOT_FOUND));
 
 
         return User.builder()
