@@ -47,16 +47,14 @@ public class TokensGenerator {
 
             // Construir el token JWT
 
-            String accesToken = Jwts.builder()
+            return  Jwts.builder()
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.ROLE, credentials.getRol())
                     .setExpiration(Date
-                            .from(LocalDateTime.now().plusSeconds(180)
+                            .from(LocalDateTime.now().plusSeconds(10)
                                     .atZone(ZoneId.systemDefault()).toInstant()))
                     .signWith(privateKey)
-
                     .compact();
-            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
@@ -82,7 +80,8 @@ public class TokensGenerator {
                     .parseClaimsJws(header)
                     .getBody();
             String role = dao.findByUserName(claims.get(Constantes.USERNAME).toString()).orElseThrow().getRol();
-            String accesToken = Jwts.builder()
+
+            return  Jwts.builder()
                     .setSubject(claims.get(Constantes.USERNAME).toString())
                     .claim(Constantes.ROLE, role)
                     .setExpiration(Date
@@ -91,7 +90,6 @@ public class TokensGenerator {
                     .signWith(privateKey)
 
                     .compact();
-            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
             throw new TokenInvalidoException(e.getMessage());
@@ -113,16 +111,16 @@ public class TokensGenerator {
 
 
             // Construir el token JWT
-            String accesToken = Jwts.builder()
+
+            return Jwts.builder()
                     .setSubject(credentials.getUserName())
                     .claim(Constantes.USERNAME, credentials.getUserName())
                     .setExpiration(Date.from(LocalDateTime.now().plusMinutes(10)
                             .atZone(ZoneId.systemDefault()).toInstant()))
-
+                    .claim(Constantes.ROLE, credentials.getRol())
                     .signWith(privateKey)
 
                     .compact();
-            return accesToken;
         } catch (CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException |
                  UnrecoverableEntryException e) {
             Logger.getLogger(TokensGenerator.class.getName()).log(Level.SEVERE, null, e);
