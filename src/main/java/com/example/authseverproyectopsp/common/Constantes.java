@@ -11,6 +11,11 @@ public class Constantes {
     public static final String ESE_USER_YA_EXISTE = "Ese user ya existe";
     public static final String USER_NOT_FOUND = "User not found";
     public static final String ERROR_WHILE_PROCESSING_TOKENS = "Error while processing tokens";
+    public static final String SECURITY_JWT_KEYSTORE_NAME = "${application.security.jwt.keystoreName}";
+    public static final String APPLICATION_SECURITY_JWT_CLAVE = "${application.security.jwt.clave}";
+    public static final String SECURITY_JWT_SERVER_NAME = "${application.security.jwt.serverName}";
+    public static final String APPLICATION_SECURITY_JWT_ACCESS_EXPIRATION = "${application.security.jwt.access-expiration}";
+    public static final String APPLICATION_SECURITY_JWT_REFRESH_TOKEN_EXPIRATION = "${application.security.jwt.refresh-token.expiration}";
 
     private Constantes() {
     }

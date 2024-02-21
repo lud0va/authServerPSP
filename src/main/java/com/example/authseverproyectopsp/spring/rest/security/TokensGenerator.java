@@ -21,15 +21,15 @@ import java.util.logging.Logger;
 
 @Component
 public class TokensGenerator {
-    @Value("${application.security.jwt.keystoreName}")
+    @Value(Constantes.SECURITY_JWT_KEYSTORE_NAME)
     private String keystorename;
-    @Value("${application.security.jwt.clave}")
+    @Value(Constantes.APPLICATION_SECURITY_JWT_CLAVE)
     private String claveKeystore;
-    @Value("${application.security.jwt.serverName}")
+    @Value(Constantes.SECURITY_JWT_SERVER_NAME)
     private String serverName;
-    @Value("${application.security.jwt.access-expiration}")
+    @Value(Constantes.APPLICATION_SECURITY_JWT_ACCESS_EXPIRATION)
     private long refreshExpiration;
-    @Value("${application.security.jwt.refresh-token.expiration}")
+    @Value(Constantes.APPLICATION_SECURITY_JWT_REFRESH_TOKEN_EXPIRATION)
     private  long access;
 
 
